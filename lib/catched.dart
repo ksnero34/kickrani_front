@@ -5,6 +5,7 @@
 //get으로 어떻게 넘겨줄지
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class catched extends StatefulWidget {
   String imageurl;
@@ -50,7 +51,14 @@ class catched_State extends State<catched> {
                 width: 200,
                 child: TextButton(
                   onPressed: null,
-                  child: Image.network(imageurl, fit: BoxFit.cover),
+                  child: CachedNetworkImage(
+                    imageUrl: imageurl,
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) =>
+                            CircularProgressIndicator(
+                                value: downloadProgress.progress),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
                 ),
               ),
               Text(location),

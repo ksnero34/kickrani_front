@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:kickrani/catched.dart';
 import 'package:http/http.dart' as http;
+import 'package:cached_network_image/cached_network_image.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> images = <String>[];
   List<String> location = <String>[];
   List<String> time = <String>[];
-  bool img_set = false;
+  bool img_set = true;
   @override
   void initState() {
     // TODO: implement initState
@@ -70,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
         time.add(item['url']);
       }
     });
-    img_set = true;
+    img_set = false;
   }
 
   @override
@@ -114,7 +115,13 @@ class _MyHomePageState extends State<MyHomePage> {
                             )),
                   );
                 },
-                child: Image.network(images[index], fit: BoxFit.cover),
+                child: CachedNetworkImage(
+                  imageUrl: images[index],
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      CircularProgressIndicator(
+                          value: downloadProgress.progress),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
               ));
       },
     )));
