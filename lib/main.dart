@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> images = <String>[];
   List<String> location = <String>[];
   List<String> time = <String>[];
-
+  bool img_set = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -70,6 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
         time.add(item['url']);
       }
     });
+    img_set = true;
   }
 
   @override
@@ -91,21 +92,30 @@ class _MyHomePageState extends State<MyHomePage> {
         crossAxisSpacing: 1, //수직 Padding
       ),
       itemBuilder: (BuildContext context, int index) {
-        return Container(
-            child: TextButton(
-          onPressed: () async {
-            await Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => catched(
-                        imageurl: images[index],
-                        location: location[index],
-                        time: time[index],
-                      )),
-            );
-          },
-          child: Image.network(images[index], fit: BoxFit.cover),
-        ));
+        return img_set
+            ? Center(
+                child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  Text('서버와 통신중입니다!'),
+                ],
+              ))
+            : Container(
+                child: TextButton(
+                onPressed: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => catched(
+                              imageurl: images[index],
+                              location: location[index],
+                              time: time[index],
+                            )),
+                  );
+                },
+                child: Image.network(images[index], fit: BoxFit.cover),
+              ));
       },
     )));
   }
