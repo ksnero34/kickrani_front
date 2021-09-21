@@ -7,28 +7,45 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import 'maps.dart';
+
 class catched extends StatefulWidget {
   String imageurl;
   String location;
   String time;
+  String lati;
+  String longi;
 
   catched({
     required this.imageurl,
     required this.location,
     required this.time,
+    required this.lati,
+    required this.longi,
   });
   @override
-  catched_State createState() =>
-      catched_State(imageurl: imageurl, location: location, time: time);
+  catched_State createState() => catched_State(
+      imageurl: imageurl,
+      location: location,
+      time: time,
+      lati: lati,
+      longi: longi);
 }
 
 class catched_State extends State<catched> {
   String imageurl;
   String location;
   String time;
+  String lati;
+  String longi;
 
-  catched_State(
-      {required this.imageurl, required this.location, required this.time});
+  catched_State({
+    required this.imageurl,
+    required this.location,
+    required this.time,
+    required this.lati,
+    required this.longi,
+  });
 
   @override
   void initState() {
@@ -61,7 +78,18 @@ class catched_State extends State<catched> {
                   ),
                 ),
               ),
-              Text(location),
+              TextButton(
+                  onPressed: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => maps(
+                                lati: lati,
+                                longi: longi,
+                              )),
+                    );
+                  },
+                  child: Text(location)),
               Text(time),
               Material(
                 child: InkWell(

@@ -112,6 +112,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               imageurl: images[index],
                               location: location[index],
                               time: time[index],
+                              lati: location[index],
+                              longi: location[index],
                             )),
                   );
                 },
