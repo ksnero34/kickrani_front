@@ -46,11 +46,11 @@ class maps_state extends State<maps> {
 
   static final CameraPosition kickrani = CameraPosition(
     target: LatLng(35.1331, 129.102),
-    zoom: 15,
+    zoom: 19,
   );
 
   static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799, //얼마나 북을 기준으로 기울일지
+      bearing: 192.8334901395799, //얼마나 북을 기준으로 돌릴지.
       target: LatLng(37.43296265331129, -122.08832357078792),
       tilt: 59.440717697143555,
       zoom: 19.151926040649414);
