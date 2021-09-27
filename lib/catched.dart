@@ -6,6 +6,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:kickrani/kick_simul.dart';
 
 import 'maps.dart';
 
@@ -100,6 +101,19 @@ class catched_State extends State<catched> {
                   ),
                   onTap: () async {
                     Navigator.pop(context);
+                  },
+                ),
+              ),
+              Material(
+                child: InkWell(
+                  child: SizedBox(
+                    width: 56,
+                    height: 56,
+                    child: Image.asset('assets/simin_icon.png'),
+                  ),
+                  onTap: () async {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => kick_simul()));
                   },
                 ),
               ),

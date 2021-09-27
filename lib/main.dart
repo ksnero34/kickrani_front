@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:kickrani/catched.dart';
@@ -59,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> fillList() async {
-    // Fill the list with links
+    // 나중에 WAS완성시 url바꾸기
     var json = jsonDecode(
         (await http.get(Uri.parse("https://picsum.photos/v2/list?limit=40")))
             .body);

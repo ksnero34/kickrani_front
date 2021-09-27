@@ -59,7 +59,7 @@ class maps_state extends State<maps> {
   Widget build(BuildContext context) {
     return new Scaffold(
       body: GoogleMap(
-        mapType: MapType.hybrid,
+        mapType: MapType.normal,
         initialCameraPosition: kickrani,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
