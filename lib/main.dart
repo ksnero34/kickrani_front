@@ -82,48 +82,67 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return CupertinoPageScaffold(
         child: Material(
-            child: GridView.builder(
-      itemCount: images.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        //childAspectRatio: 1 / 2,
-        mainAxisSpacing: 1, //수평 Padding
-        crossAxisSpacing: 1, //수직 Padding
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return img_set
-            ? Center(
-                child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(),
-                  Text('서버와 통신중입니다!'),
-                ],
-              ))
-            : Container(
-                child: TextButton(
-                onPressed: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => catched(
-                              imageurl: images[index],
-                              location: location[index],
-                              time: time[index],
-                              lati: location[index],
-                              longi: location[index],
-                            )),
-                  );
-                },
-                child: CachedNetworkImage(
-                  imageUrl: images[index],
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      CircularProgressIndicator(
-                          value: downloadProgress.progress),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                ),
-              ));
-      },
+            child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: statusBarHeight,
+        ),
+        Container(
+          height: statusHeight * 0.05,
+          child: Text(
+            '적발된 모습',
+            style: TextStyle(fontSize: 20),
+          ),
+        ),
+        Container(
+          height: statusHeight * 0.9,
+          child: GridView.builder(
+            itemCount: images.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              //childAspectRatio: 1 / 2,
+              mainAxisSpacing: 1, //수평 Padding
+              crossAxisSpacing: 1, //수직 Padding
+            ),
+            itemBuilder: (BuildContext context, int index) {
+              return img_set
+                  ? Center(
+                      child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(),
+                        Text('서버와 통신중입니다!'),
+                      ],
+                    ))
+                  : Container(
+                      child: TextButton(
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => catched(
+                                    imageurl: images[index],
+                                    location: location[index],
+                                    time: time[index],
+                                    lati: location[index],
+                                    longi: location[index],
+                                  )),
+                        );
+                      },
+                      child: CachedNetworkImage(
+                        imageUrl: images[index],
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) =>
+                                CircularProgressIndicator(
+                                    value: downloadProgress.progress),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
+                    ));
+            },
+          ),
+        ),
+      ],
     )));
   }
 }

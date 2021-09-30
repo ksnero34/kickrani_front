@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 //import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 import 'dart:async';
+import 'upload_history.dart';
 
 class kick_simul extends StatefulWidget {
   kick_simul();
@@ -19,7 +20,7 @@ class kick_simul_state extends State<kick_simul> {
   String mention = '운행 시작';
   Set<Marker> markers = {};
   bool isrunning = false;
-  List<String> drive_his = [];
+  List<List> drive_his = [];
   List<String> lochis_ele = [];
 
   late GoogleMapController mapController;
@@ -61,8 +62,9 @@ class kick_simul_state extends State<kick_simul> {
       if (isrunning) {
         lochis_ele.add(l.latitude.toString());
         lochis_ele.add(l.longitude.toString());
-        print(lochis_ele.toString());
-        drive_his.add(lochis_ele.toString());
+        lochis_ele.add(DateTime.now().toString());
+        //print(lochis_ele.toString());
+        drive_his.add(lochis_ele.toList());
         //print(drive_his);
         lochis_ele.clear();
       }
@@ -144,6 +146,8 @@ class kick_simul_state extends State<kick_simul> {
                   onPressed: () async {
                     if (isrunning) {
                       print(drive_his);
+                      isrunning = false;
+                      upload_history.upload_drive_history(drive_his);
                       await showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
@@ -159,6 +163,7 @@ class kick_simul_state extends State<kick_simul> {
                         ),
                       );
                     }
+
                     button_pressed();
                   },
                   label: Text(mention),
