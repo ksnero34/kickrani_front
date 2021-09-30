@@ -65,6 +65,8 @@ class kick_simul_state extends State<kick_simul> {
         lochis_ele.add(DateTime.now().toString());
         //print(lochis_ele.toString());
         drive_his.add(lochis_ele.toList());
+        upload_history.upload_drive_history(drive_his);
+        drive_his.clear();
         //print(drive_his);
         lochis_ele.clear();
       }
@@ -145,23 +147,22 @@ class kick_simul_state extends State<kick_simul> {
                 child: FloatingActionButton.extended(
                   onPressed: () async {
                     if (isrunning) {
-                      print(drive_his);
+                      //print(drive_his);
                       isrunning = false;
-                      upload_history.upload_drive_history(drive_his);
-                      await showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text('운행중 위치 트래킹'),
-                          content: SingleChildScrollView(
-                              child: Text(drive_his.toString())),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: Navigator.of(context).pop,
-                              child: Text('CLOSE'),
-                            ),
-                          ],
-                        ),
-                      );
+                      // await showDialog(
+                      //   context: context,
+                      //   builder: (context) => AlertDialog(
+                      //     title: Text('운행중 위치 트래킹'),
+                      //     content: SingleChildScrollView(
+                      //         child: Text(drive_his.toString())),
+                      //     actions: <Widget>[
+                      //       TextButton(
+                      //         onPressed: Navigator.of(context).pop,
+                      //         child: Text('CLOSE'),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // );
                     }
 
                     button_pressed();
