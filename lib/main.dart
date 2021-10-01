@@ -47,7 +47,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<String> images = <String>[];
   List<String> reason = <String>[];
-  List<String> location = <String>[];
+  List<String> lati = <String>[];
+  List<String> longi = <String>[];
   List<String> time = <String>[];
   bool img_set = true;
   @override
@@ -60,15 +61,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> fillList() async {
     // 나중에 WAS완성시 url바꾸기
     var json = jsonDecode(
-        (await http.get(Uri.parse("https://picsum.photos/v2/list?limit=40")))
-            .body);
+        (await http.get(Uri.parse("http://211.219.250.41:8080"))).body);
     setState(() {
       Map<String, dynamic> item;
       for (item in json) {
-        images.add(item['download_url']);
-        reason.add(item['download_url']);
-        location.add(item['author']);
-        time.add(item['url']);
+        images.add(item['pic']);
+        reason.add(item['reason']);
+        lati.add(item['lati']);
+        longi.add(item['longi']);
+        time.add(item['time']);
       }
     });
     img_set = false;
@@ -126,10 +127,9 @@ class _MyHomePageState extends State<MyHomePage> {
                               builder: (context) => catched(
                                     imageurl: images[index],
                                     reason: reason[index],
-                                    location: location[index],
                                     time: time[index],
-                                    lati: '35.1331',
-                                    longi: '129.102',
+                                    lati: lati[index],
+                                    longi: longi[index],
                                   )),
                         );
                       },

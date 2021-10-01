@@ -29,7 +29,7 @@ class maps_state extends State<maps> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    spot = LatLng(35.1331, 129.102);
+    spot = LatLng(double.parse(lati), double.parse(longi));
     markers.add(Marker(
       markerId: MarkerId('userstartloc'),
       position: LatLng(
@@ -42,28 +42,23 @@ class maps_state extends State<maps> {
     ));
   }
 
-  Completer<GoogleMapController> _controller = Completer();
+  //Completer<GoogleMapController> _controller = Completer();
 
-  static final CameraPosition kickrani = CameraPosition(
-    target: LatLng(35.1331, 129.102),
-    zoom: 19,
-  );
-
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799, //얼마나 북을 기준으로 돌릴지.
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+  // static final CameraPosition _kLake = CameraPosition(
+  //     bearing: 192.8334901395799, //얼마나 북을 기준으로 돌릴지.
+  //     target: LatLng(37.43296265331129, -122.08832357078792),
+  //     tilt: 59.440717697143555,
+  //     zoom: 19.151926040649414);
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       body: GoogleMap(
         mapType: MapType.normal,
-        initialCameraPosition: kickrani,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
+        initialCameraPosition: CameraPosition(
+          target: LatLng(spot.latitude, spot.longitude),
+          zoom: 15,
+        ),
         markers: markers,
         myLocationButtonEnabled: false,
         zoomControlsEnabled: false,

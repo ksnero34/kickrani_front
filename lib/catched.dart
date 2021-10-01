@@ -13,7 +13,7 @@ import 'maps.dart';
 class catched extends StatefulWidget {
   String imageurl;
   String reason;
-  String location;
+  //String location;
   String time;
   String lati;
   String longi;
@@ -21,7 +21,7 @@ class catched extends StatefulWidget {
   catched({
     required this.imageurl,
     required this.reason,
-    required this.location,
+    //required this.location,
     required this.time,
     required this.lati,
     required this.longi,
@@ -29,7 +29,7 @@ class catched extends StatefulWidget {
   @override
   catched_State createState() => catched_State(
       imageurl: imageurl,
-      location: location,
+      //location: location,
       reason: reason,
       time: time,
       lati: lati,
@@ -38,7 +38,7 @@ class catched extends StatefulWidget {
 
 class catched_State extends State<catched> {
   String imageurl;
-  String location;
+  //String location;
   String reason;
   String time;
   String lati;
@@ -49,7 +49,7 @@ class catched_State extends State<catched> {
   catched_State({
     required this.imageurl,
     required this.reason,
-    required this.location,
+    //required this.location,
     required this.time,
     required this.lati,
     required this.longi,
@@ -154,7 +154,7 @@ class catched_State extends State<catched> {
                       GoogleMap(
                         mapType: MapType.normal,
                         initialCameraPosition: CameraPosition(
-                          target: LatLng(35.1331, 129.102),
+                          target: LatLng(spot.latitude, spot.longitude),
                           zoom: 15,
                         ),
                         markers: markers,
@@ -182,6 +182,12 @@ class catched_State extends State<catched> {
                                         longi: longi,
                                       )),
                             );
+                          },
+                          onLongPress: () async {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => kick_simul()));
                           },
                           child: Text(''),
                         ),
@@ -214,10 +220,6 @@ class catched_State extends State<catched> {
                     height: 20,
                     child: Image.asset('assets/simin_icon.png'),
                   ),
-                  onTap: () async {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => kick_simul()));
-                  },
                 ),
               ),
             ],
