@@ -212,16 +212,6 @@ class catched_State extends State<catched> {
                     Navigator.pop(context);
                   },
                   child: Text('목록으로 돌아가기')),
-
-              Material(
-                child: InkWell(
-                  child: SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: Image.asset('assets/simin_icon.png'),
-                  ),
-                ),
-              ),
             ],
           ),
         ],
