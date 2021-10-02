@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kickrani/catched.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
@@ -51,6 +52,9 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> longi = <String>[];
   List<String> time = <String>[];
   bool img_set = true;
+
+  Set<Marker> markers = {};
+
   @override
   void initState() {
     // TODO: implement initState
@@ -70,6 +74,14 @@ class _MyHomePageState extends State<MyHomePage> {
         lati.add(item['lati']);
         longi.add(item['longi']);
         time.add(item['time']);
+        markers.add(Marker(
+          markerId: MarkerId(item['reason']),
+          position:
+              LatLng(double.parse(item['lati']), double.parse(item['longi'])),
+          infoWindow: InfoWindow(
+            title: '킥라니가 찍힌 위치',
+          ),
+        ));
       }
     });
     img_set = false;
@@ -99,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         Container(
-          height: statusHeight * 0.9,
+          height: statusHeight * 0.5,
           child: GridView.builder(
             itemCount: images.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -145,6 +157,27 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
         ),
+        Container(
+          height: statusHeight * 0.05,
+          child: Text(
+            '포착된 위치들',
+            style: TextStyle(fontSize: 20),
+          ),
+        ),
+        Container(
+          height: statusHeight * 0.3,
+          width: 300,
+          child: GoogleMap(
+            mapType: MapType.normal,
+            initialCameraPosition: CameraPosition(
+              target: LatLng(35.1331, 129.102),
+              zoom: 15,
+            ),
+            markers: markers,
+            myLocationButtonEnabled: false,
+            zoomControlsEnabled: false,
+          ),
+        )
       ],
     )));
   }
