@@ -137,16 +137,16 @@ class _MyHomePageState extends State<MyHomePage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => catched(
-                                    imageurl: images[index],
-                                    reason: reason[index],
-                                    time: time[index],
-                                    lati: lati[index],
-                                    longi: longi[index],
+                                    imageurl: images[images.length - 1 - index],
+                                    reason: reason[images.length - 1 - index],
+                                    time: time[images.length - 1 - index],
+                                    lati: lati[images.length - 1 - index],
+                                    longi: longi[images.length - 1 - index],
                                   )),
                         );
                       },
                       child: CachedNetworkImage(
-                        imageUrl: images[index],
+                        imageUrl: images[images.length - 1 - index],
                         progressIndicatorBuilder:
                             (context, url, downloadProgress) =>
                                 CircularProgressIndicator(
