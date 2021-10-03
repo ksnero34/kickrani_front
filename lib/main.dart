@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> time = <String>[];
   bool img_set = true;
 
-  Set<Marker> markers = {};
+  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
   @override
   void initState() {
@@ -74,18 +74,36 @@ class _MyHomePageState extends State<MyHomePage> {
         lati.add(item['lati']);
         longi.add(item['longi']);
         time.add(item['time']);
-        markers.add(Marker(
-          markerId: MarkerId(item['reason']),
-          position:
-              LatLng(double.parse(item['lati']), double.parse(item['longi'])),
-          infoWindow: InfoWindow(
-            title: '킥라니가 찍힌 위치',
-          ),
-        ));
+        // print(double.parse(item['lati']));
+        // print(double.parse(item['longi']));
+        var markerIdVal = markers.length + 1;
+        String mar = markerIdVal.toString();
+        MarkerId markerId = MarkerId(mar);
+        Marker marker = Marker(
+            markerId: markerId,
+            position: LatLng(
+                double.parse(item['lati']), double.parse(item['longi'])));
+
+        markers[markerId] = marker;
       }
     });
+    // await addmarker();
     img_set = false;
   }
+
+  // Future<void> addmarker() async {
+  //   //print(lati.length);
+  //   for (int i = 0; i < lati.length; i++) {
+  //     _markers.add(Marker(
+  //       markerId: MarkerId(reason.elementAt(i)),
+  //       position: LatLng(
+  //           double.parse(lati.elementAt(i)), double.parse(longi.elementAt(i))),
+  //       infoWindow: InfoWindow(
+  //         title: '킥라니가 찍힌 위치',
+  //       ),
+  //     ));
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +112,17 @@ class _MyHomePageState extends State<MyHomePage> {
     final double statusHeight = (MediaQuery.of(context).size.height -
         statusBarHeight -
         MediaQuery.of(context).padding.bottom); // 기기의 화면크기
+
+    const myduration = const Duration(seconds: 5);
+    new Timer(myduration, () async {
+      images.clear();
+      reason.clear();
+      lati.clear();
+      longi.clear();
+      time.clear();
+      //print('refressedddddd');
+      await fillList();
+    });
 
     return CupertinoPageScaffold(
         child: Material(
@@ -173,7 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
               target: LatLng(35.1331, 129.102),
               zoom: 15,
             ),
-            markers: markers,
+            markers: Set<Marker>.of(markers.values),
             myLocationButtonEnabled: false,
             zoomControlsEnabled: false,
           ),
