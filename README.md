@@ -1,6 +1,7 @@
 # kickrani
 
-A new Flutter project.
+PNU 2021 오픈SW, 오픈API 활용 해커톤
+조랭이떡팀의 프론트(어플) 입니다.
 
 ## Getting Started
 
