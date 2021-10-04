@@ -17,6 +17,7 @@ class catched extends StatefulWidget {
   String time;
   String lati;
   String longi;
+  BitmapDescriptor kick_icon;
 
   catched({
     required this.imageurl,
@@ -25,15 +26,18 @@ class catched extends StatefulWidget {
     required this.time,
     required this.lati,
     required this.longi,
+    required this.kick_icon,
   });
   @override
   catched_State createState() => catched_State(
-      imageurl: imageurl,
-      //location: location,
-      reason: reason,
-      time: time,
-      lati: lati,
-      longi: longi);
+        imageurl: imageurl,
+        //location: location,
+        reason: reason,
+        time: time,
+        lati: lati,
+        longi: longi,
+        kick_icon: kick_icon,
+      );
 }
 
 class catched_State extends State<catched> {
@@ -45,6 +49,7 @@ class catched_State extends State<catched> {
   String longi;
   Set<Marker> markers = {};
   late LatLng spot;
+  BitmapDescriptor kick_icon;
 
   catched_State({
     required this.imageurl,
@@ -53,6 +58,7 @@ class catched_State extends State<catched> {
     required this.time,
     required this.lati,
     required this.longi,
+    required this.kick_icon,
   });
 
   @override
@@ -61,16 +67,29 @@ class catched_State extends State<catched> {
     super.initState();
 
     spot = LatLng(double.parse(lati), double.parse(longi));
-    markers.add(Marker(
-      markerId: MarkerId('userstartloc'),
-      position: LatLng(
-        spot.latitude,
-        spot.longitude,
-      ),
-      infoWindow: InfoWindow(
-        title: '킥라니가 찍힌 위치',
-      ),
-    ));
+    addmarker();
+  }
+
+  setmarkerimg() async {
+    kick_icon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 0.2), 'assets/marker.png');
+  }
+
+  addmarker() {
+    setState(() {
+      setmarkerimg();
+      markers.add(Marker(
+        markerId: MarkerId('userstartloc'),
+        icon: kick_icon,
+        position: LatLng(
+          spot.latitude,
+          spot.longitude,
+        ),
+        infoWindow: InfoWindow(
+          title: '킥라니가 찍힌 위치',
+        ),
+      ));
+    });
   }
 
   Widget popupimg(BuildContext context, String imageurl) {

@@ -19,7 +19,7 @@ class maps_state extends State<maps> {
   String lati, longi;
   late LatLng spot;
   Set<Marker> markers = {};
-
+  late BitmapDescriptor kick_icon;
   maps_state({
     required this.lati,
     required this.longi,
@@ -30,16 +30,29 @@ class maps_state extends State<maps> {
     // TODO: implement initState
     super.initState();
     spot = LatLng(double.parse(lati), double.parse(longi));
-    markers.add(Marker(
-      markerId: MarkerId('userstartloc'),
-      position: LatLng(
-        spot.latitude,
-        spot.longitude,
-      ),
-      infoWindow: InfoWindow(
-        title: '킥라니가 찍힌 위치',
-      ),
-    ));
+    setmarkerimg();
+    addmarker();
+  }
+
+  Future<void> setmarkerimg() async {
+    kick_icon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 0.2), 'assets/marker.png');
+  }
+
+  Future<void> addmarker() async {
+    setState(() {
+      markers.add(Marker(
+        markerId: MarkerId('userstartloc'),
+        icon: kick_icon,
+        position: LatLng(
+          spot.latitude,
+          spot.longitude,
+        ),
+        infoWindow: InfoWindow(
+          title: '킥라니가 찍힌 위치',
+        ),
+      ));
+    });
   }
 
   //Completer<GoogleMapController> _controller = Completer();

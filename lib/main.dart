@@ -23,17 +23,26 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
-      // Remove the debug
-      debugShowCheckedModeBanner: false,
-      title: '잡았다 킥라니',
-      home: MyHomePage(),
-      localizationsDelegates: [
-        DefaultMaterialLocalizations.delegate,
-        DefaultCupertinoLocalizations.delegate,
-        DefaultWidgetsLocalizations.delegate,
-      ],
-    );
+    return FutureBuilder(
+        future: Init.instance.initialize(),
+        builder: (context, AsyncSnapshot snapshot) {
+          // Show splash screen while waiting for app resources to load:
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return MaterialApp(home: Splash());
+          } else {
+            return CupertinoApp(
+              // Remove the debug
+              debugShowCheckedModeBanner: false,
+              title: '잡았다 킥라니',
+              home: MyHomePage(),
+              localizationsDelegates: [
+                DefaultMaterialLocalizations.delegate,
+                DefaultCupertinoLocalizations.delegate,
+                DefaultWidgetsLocalizations.delegate,
+              ],
+            );
+          }
+        });
   }
 }
 
@@ -51,21 +60,86 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> lati = <String>[];
   List<String> longi = <String>[];
   List<String> time = <String>[];
+  List<String> images2 = <String>[];
+  List<String> reason2 = <String>[];
+  List<String> lati2 = <String>[];
+  List<String> longi2 = <String>[];
+  List<String> time2 = <String>[];
   bool img_set = true;
 
+  late BitmapDescriptor kick_icon;
+
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+  Map<MarkerId, Marker> markers2 = <MarkerId, Marker>{};
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    images.clear();
+    reason.clear();
+    lati.clear();
+    longi.clear();
+    time.clear();
+    setmarkerimg();
     fillList();
+  }
+
+  setmarkerimg() async {
+    kick_icon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 0.2), 'assets/marker.png');
+  }
+
+  Future<void> updatelist() async {
+    print('update 들어옴');
+    var json = jsonDecode(
+        (await http.get(Uri.parse("http://211.219.250.41:8888"))).body);
+    Map<String, dynamic> item;
+    for (item in json) {
+      images2.add(item['pic']);
+      reason2.add(item['reason']);
+      lati2.add(item['lati']);
+      longi2.add(item['longi']);
+      time2.add(item['time']);
+      // print(double.parse(item['lati']));
+      // print(double.parse(item['longi']));
+      var markerIdVal = markers.length + 1;
+      String mar = markerIdVal.toString();
+      MarkerId markerId = MarkerId(mar);
+      Marker marker = Marker(
+          markerId: markerId,
+          icon: kick_icon,
+          infoWindow: InfoWindow(title: '킥라니가 찍힌 위치'),
+          position:
+              LatLng(double.parse(item['lati']), double.parse(item['longi'])));
+
+      markers2[markerId] = marker;
+    }
+
+    print('업데이트 작업중');
+
+    setState(() {
+      images = images2.toList();
+      reason = reason2.toList();
+      lati = lati.toList();
+      longi = longi2.toList();
+      time = time2.toList();
+      markers.clear();
+      markers = <MarkerId, Marker>{}..addAll(markers2);
+    });
+
+    images2.clear();
+    reason2.clear();
+    lati2.clear();
+    longi2.clear();
+    time2.clear();
+    markers2.clear();
   }
 
   Future<void> fillList() async {
     // 나중에 WAS완성시 url바꾸기
     var json = jsonDecode(
-        (await http.get(Uri.parse("http://211.219.250.41:8080"))).body);
+        (await http.get(Uri.parse("http://211.219.250.41:8888"))).body);
     setState(() {
       Map<String, dynamic> item;
       for (item in json) {
@@ -81,6 +155,8 @@ class _MyHomePageState extends State<MyHomePage> {
         MarkerId markerId = MarkerId(mar);
         Marker marker = Marker(
             markerId: markerId,
+            icon: kick_icon,
+            infoWindow: InfoWindow(title: '킥라니가 찍힌 위치'),
             position: LatLng(
                 double.parse(item['lati']), double.parse(item['longi'])));
 
@@ -115,13 +191,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     const myduration = const Duration(seconds: 5);
     new Timer(myduration, () async {
-      images.clear();
-      reason.clear();
-      lati.clear();
-      longi.clear();
-      time.clear();
-      //print('refressedddddd');
-      await fillList();
+      print('refressedddddd');
+      await updatelist();
     });
 
     return CupertinoPageScaffold(
@@ -171,6 +242,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     time: time[images.length - 1 - index],
                                     lati: lati[images.length - 1 - index],
                                     longi: longi[images.length - 1 - index],
+                                    kick_icon: kick_icon,
                                   )),
                         );
                       },
@@ -209,5 +281,34 @@ class _MyHomePageState extends State<MyHomePage> {
         )
       ],
     )));
+  }
+}
+
+class Splash extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    bool lightMode =
+        MediaQuery.of(context).platformBrightness == Brightness.light;
+    return Scaffold(
+      backgroundColor: lightMode
+          ? Color(0xe1f5fe).withOpacity(1.0)
+          : Color(0x042a49).withOpacity(1.0),
+      body: Center(
+          child: lightMode
+              ? Image.asset('assets/background.png')
+              : Image.asset('assets/background.png')),
+    );
+  }
+}
+
+class Init {
+  Init._();
+  static final instance = Init._();
+
+  Future initialize() async {
+    // This is where you can initialize the resources needed by your app while
+    // the splash screen is displayed.  Remove the following example because
+    // delaying the user experience is a bad design practice!
+    await Future.delayed(const Duration(seconds: 2));
   }
 }
