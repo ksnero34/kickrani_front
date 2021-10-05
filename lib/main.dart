@@ -55,6 +55,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final String server = 'Put your server here';
   List<String> images = <String>[];
   List<String> reason = <String>[];
   List<String> lati = <String>[];
@@ -92,8 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> updatelist() async {
     print('update 들어옴');
-    var json = jsonDecode(
-        (await http.get(Uri.parse("http://211.219.250.41:8888"))).body);
+    var json = jsonDecode((await http.get(Uri.parse(server))).body);
     Map<String, dynamic> item;
     for (item in json) {
       images2.add(item['pic']);
@@ -138,8 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> fillList() async {
     // 나중에 WAS완성시 url바꾸기
-    var json = jsonDecode(
-        (await http.get(Uri.parse("http://211.219.250.41:8888"))).body);
+    var json = jsonDecode((await http.get(Uri.parse(server))).body);
     setState(() {
       Map<String, dynamic> item;
       for (item in json) {
