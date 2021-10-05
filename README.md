@@ -17,6 +17,7 @@ express 기준 db와의 connect 설정후 아래와 같이 구성하시면 됩�
 
 ######################################
 
+
 app.get("/", function(req, res){
 
     connection.query('SELECT * FROM catched', function(err, rows, fields){
@@ -34,7 +35,6 @@ app.get("/", function(req, res){
     });
     
 });
-
 
 app.get("/", function(req, res){
 
