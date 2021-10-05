@@ -18,19 +18,32 @@ express 기준 db와의 connect 설정후 아래와 같이 구성하시면 됩�
 ######################################
 
 app.get("/", function(req, res){
+
     connection.query('SELECT * FROM catched', function(err, rows, fields){
+    
         if(!err){
+        
             res.send(rows);
+            
             console.log('The solution is: ', rows);
+            
         }
+        
         else console.log('Error while performing Query.');
+        
     });
+    
 });
 
+
 app.get("/", function(req, res){
+
         res.send('kickwassssss')
+        
 });
+
 app.use('/pic',express.static(__dirname+'/pic'));
+
 
 ######################################
 
